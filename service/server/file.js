@@ -39,9 +39,23 @@ const file = {
 	 */
 	listenIndex: () => {
 		app.get('/', (req, res) => {
-			console.log('xxx')
+			const ip = file.get_client_ip(req)
+			console.log(ip)
 			res.send(indexCache)
 		})
+	},
+	get_client_ip: req => {
+		var ip = (
+			req.headers['x-forwarded-for'] ||
+			req.ip ||
+			req.connection.remoteAddress ||
+			req.socket.remoteAddress ||
+			req.connection.socket.remoteAddress || ''
+		)
+		if (ip.split(',').length > 0) {
+			ip = ip.split(',')[0]
+		}
+		return ip
 	},
 	/**
 	 * 缓存首页
