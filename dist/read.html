@@ -23,40 +23,31 @@
 			}
 		</style>
 		<script>
-			var iList = [
-				1257718,
-				1259351,
-				1257759,
-				1257898,
-				1255843,
-				1254760,
-				1253645,
-				1249405,
-				1248735,
-				1247704,
-				1247084,
-				1244826,
-				1243408,
-				1235559,
-				1230415,
-				1230554,
-				1229296,
-				1228867,
-				1228991,
-				1228967,
-				1227274,
-				1225433,
-				1220091
-			]
-			iList.forEach(function(id) {
-				var url = 'https://i.hentaifox.com/002/' + id + '/thumb.jpg'
-				var img = document.createElement('img')
-				img.src = url
-				img.addEventListener('click', function() {
-					location.href = 'read.html?type=i&id=' + id
+			function getSearchObj() {
+				var search = location.search
+				if (!search) return null
+				search = search.slice(1)
+				var ary = search.split('&')
+				var result = {}
+				ary.forEach(function(s) {
+					var ary2 = s.split('=')
+					result[ary2[0]] = ary2[1]
 				})
+				return result
+			}
+			var searchObj = getSearchObj()
+			var prefix = 'https://' + searchObj.type + '.hentaifox.com/002/' + searchObj.id + '/'			
+			for (var i = 1; i <90; i += 1) {
+				var src = prefix + i + '.jpg'
+				var img = document.createElement('img')
+				img.src = src
+				img.addEventListener('click', openImg.bind(undefined, src))
 				document.getElementById('container').appendChild(img)
-			})
+		    }
+			
+			function openImg(src) {
+				location.href = src
+			}
 		</script>
     </body>
 </html>
