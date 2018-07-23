@@ -61,30 +61,8 @@ const file = {
 	 * 缓存首页
 	 */
 	cacheIndex: () => {
-		const env = args.env || 'production'
-		const serverUrl = args.server || 'http://47.96.83.110:8080'
-		const login = args.login
-		const agentid = args.agentid
 		fs.readFile('../dist/index.html', (err, data) => {
 			let dummy = data.toString()
-			/**
-			 * 使用生产环境
-			 */
-			dummy = dummy.replace('##env##', env)
-			/**
-			 * 服务器地址
-			 */
-			dummy = dummy.replace('##__SERVER_URL__##', serverUrl)
-			/**
-			 * agentid
-			 */
-			dummy = dummy.replace('##__agentid__##', agentid)
-			/**
-			 * 模拟登陆
-			 */
-			if (login) {
-				// dummy = dummy.replace('##__LOGIN__##', login)
-			}
 			indexCache = dummy
 		})
 	}
