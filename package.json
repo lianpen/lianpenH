@@ -1,0 +1,18 @@
+{
+  "name": "lianpenH",
+  "version": "1.0.0",
+  "description": "lianpenH",
+  "main": "index.js",
+  "scripts": {
+    "start": "webpack-dev-server",
+    "build": "node ./node_modules/webpack/bin/webpack.js"
+  },
+  "author": "lianpen",
+  "license": "ISC",
+  "devDependencies": {
+    "compression": "^1.7.2",
+    "express": "^4.16.3"
+  },
+  "dependencies": {
+  }
+}

@@ -6,7 +6,7 @@
 const app = require('./app')
 var fs = require('fs');
 const args = require('./args')
-const port = args.port || 80
+const port = args.port || 2007
 
 /*
 var https = require('https');
