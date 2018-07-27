@@ -23,36 +23,31 @@
 			}
 		</style>
 		<script>
-			var i2List = [
-				1258308,
-				1258174,
-				1256696,
-				1255120,
-				1249046,
-				1244915,
-				1243390,
-				1243354,
-				1243125,
-				1241492,
-				1240926,
-				1240876,
-				1231521,
-				1230590,
-				1230650,
-				1227425,
-				1227242,
-				1227071
-			]
-			i2List.forEach(function(id) {
-			return
-				var url = 'https://i2.hentaifox.com/002/' + id + '/thumb.jpg'
-				var img = document.createElement('img')
-				img.src = url
-				img.addEventListener('click', function() {
-					location.href = 'read.html?type=i2&id=' + id
+			function getSearchObj() {
+				var search = location.search
+				if (!search) return null
+				search = search.slice(1)
+				var ary = search.split('&')
+				var result = {}
+				ary.forEach(function(s) {
+					var ary2 = s.split('=')
+					result[ary2[0]] = ary2[1]
 				})
+				return result
+			}
+			var searchObj = getSearchObj()
+			var prefix = 'https://' + searchObj.type + '.hentaifox.com/002/' + searchObj.id + '/'			
+			for (var i = 1; i <90; i += 1) {
+				var src = prefix + i + '.jpg'
+				var img = document.createElement('img')
+				img.src = src
+				//img.addEventListener('click', openImg.bind(undefined, src))
 				document.getElementById('container').appendChild(img)
-			})
+		    }
+			
+			function openImg(src) {
+				location.href = src
+			}
 		</script>
     </body>
 </html>

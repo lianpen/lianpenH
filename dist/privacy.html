@@ -9,11 +9,55 @@
         <title>lianpenH</title>
     </head>
     <body>
-        <h3>
-            隐私
-        </h3>
-		<p>
-			...
-		</p>
+        <div id='container'>
+			
+		</div>
+		<style>
+			#container {
+				margin: 10px;
+			}
+			#container img {
+				width: 100%;
+				max-width: 500px;
+				margin: 10px 0;
+			}
+		</style>
+		<script>
+			var iList = [
+				1257718,
+				1259351,
+				1257759,
+				1257898,
+				1255843,
+				1254760,
+				1253645,
+				1249405,
+				1248735,
+				1247704,
+				1247084,
+				1244826,
+				1243408,
+				1235559,
+				1230415,
+				1230554,
+				1229296,
+				1228867,
+				1228991,
+				1228967,
+				1227274,
+				1225433,
+				1220091
+			]
+			iList.forEach(function(id) {
+			return
+				var url = 'https://i.hentaifox.com/002/' + id + '/thumb.jpg'
+				var img = document.createElement('img')
+				img.src = url
+				img.addEventListener('click', function() {
+					location.href = 'read.html?type=i&id=' + id
+				})
+				document.getElementById('container').appendChild(img)
+			})
+		</script>
     </body>
 </html>
