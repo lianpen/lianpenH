@@ -36,17 +36,37 @@
 				return result
 			}
 			var searchObj = getSearchObj()
-			var prefix = 'https://' + searchObj.type + '.hentaifox.com/002/' + searchObj.id + '/'			
-			for (var i = 1; i <90; i += 1) {
-				var src = prefix + i + '.jpg'
-				var img = document.createElement('img')
-				img.src = src
-				//img.addEventListener('click', openImg.bind(undefined, src))
-				document.getElementById('container').appendChild(img)
-		    }
+			var type = searchObj.type || '002'
+			var prefix = 'https://i2.hentaifox.com/' + type + '/' + searchObj.id + '/'	
+			var pageIndex = 0		
+			var pageSize = 5
+			var $container = document.getElementById('container')
+			loadPage()
 			
-			function openImg(src) {
-				location.href = src
+			async function loadPage() {
+				var numberList = Array.from(Array(pageSize), (a, b) => b)
+				var promiseList = numberList.map(number => {
+					var index = pageSize * pageIndex + number + 1
+					return new Promise(async resolve => {
+						await loadImg(index)
+						resolve()
+					})
+				})
+				await Promise.all(promiseList)
+				pageIndex += 1
+				loadPage()
+			} 
+			async function loadImg(index) {
+				return new Promise(resolve => {
+					var src = prefix + index + '.jpg'
+					var img = document.createElement('img')
+					img.src = src
+					img.onload = function() {
+						console.log(img)
+						resolve()
+					}
+					$container.appendChild(img)
+				})
 			}
 		</script>
     </body>

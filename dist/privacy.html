@@ -49,11 +49,11 @@
 				1220091
 			]
 			iList.forEach(function(id) {
-				var url = 'https://i.hentaifox.com/002/' + id + '/thumb.jpg'
+				var url = 'https://i2.hentaifox.com/002/' + id + '/thumb.jpg'
 				var img = document.createElement('img')
 				img.src = url
 				img.addEventListener('click', function() {
-					location.href = 'read.html?type=i&id=' + id
+					location.href = 'read.html?id=' + id
 				})
 				document.getElementById('container').appendChild(img)
 			})
