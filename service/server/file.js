@@ -39,11 +39,17 @@ const file = {
 	 */
 	listenIndex: () => {
 		app.get('/', (req, res) => {
+			const date = dateFormat(new Date(), 'yyyy-MM-dd hh:mm:ss')
+			console.log(date)
 			const ip = file.get_client_ip(req)
 			console.log(ip)
 			res.send(indexCache)
 		})
 	},
+	
+	/**
+	 * 获取请求ip
+	 */
 	get_client_ip: req => {
 		var ip = (
 			req.headers['x-forwarded-for'] ||
@@ -66,6 +72,28 @@ const file = {
 			indexCache = dummy
 		})
 	}
+}
+
+/**
+ * 日期格式化
+ */
+function dateFormat(date, format) {
+	var rules = {
+		"M+": date.getMonth() + 1,
+		"d+": date.getDate(),
+		"h+": date.getHours(),
+		"m+": date.getMinutes(),
+		"s+": date.getSeconds()
+	}
+	if (/(y+)/i.test(format)) {
+		format = format.replace(RegExp.$1, (date.getFullYear() + "").substr(4 - RegExp.$1.length))
+	}
+	for (var key in rules) {
+		if (new RegExp("(" + key + ")").test(format)) {
+			format = format.replace(RegExp.$1, RegExp.$1.length == 1 ? rules[key] : ("00" + rules[key]).substr(("" + rules[key]).length))
+		}
+	}
+	return format
 }
 
 file.cacheIndex()
