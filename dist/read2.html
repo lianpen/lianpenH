@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no, minimal-ui">
+        <meta name="apple-mobile-web-app-capable" content="yes">
+        <meta name="apple-mobile-web-app-status-bar-style" content="black">
+        <meta name="format-detection" content="telephone=no">
+        <title>lianpenH</title>
+    </head>
+    <body>
+        <div id='container'>
+			
+		</div>
+		<style>
+			#container {
+				margin: 10px;
+			}
+			#container img {
+				width: 100%;
+				margin: 10px 0;
+			}
+		</style>
+		<script>
+			var bestAry = [
+				1156539,
+				608878,
+				1044833,
+				1318189,1115595
+			]
+			function getSearchObj() {
+				var search = location.search
+				if (!search) return null
+				search = search.slice(1)
+				var ary = search.split('&')
+				var result = {}
+				ary.forEach(function(s) {
+					var ary2 = s.split('=')
+					result[ary2[0]] = ary2[1]
+				})
+				return result
+			}
+			var prefix = 'https://i.nhentai.net/galleries/' + getSearchObj().id + '/'
+			var $container = document.getElementById('container')	
+			/**
+			 * 当前加载的页面索引
+			 */
+			var pageIndex = 0	
+			/**
+			 * 每页的图片数量
+			 */
+			const PAGE_SIZE = 2
+			/**
+			 * 每页的临界加载时间
+			 */
+			const TIMEOUT = 3 * 60 * 1000
+			/**
+			 * 开始第一页
+			 */
+			loadPage()
+			
+			/**
+			 * 根据当前索引加载图片
+			 * 由成功约定和失败约定进行Race 不管谁先到达 都加载下一页
+			 */
+			async function loadPage() {
+				await Promise.race([getSuccessPromise(), getErrorPromise()])
+				pageIndex += 1
+				loadPage()
+			}
+			
+			/**
+			 * 获取成功的约定
+			 */
+			function getSuccessPromise() {
+				var numberList = Array.from(Array(PAGE_SIZE), (a, b) => b)
+				var promiseList = numberList.map(number => {
+					var index = PAGE_SIZE * pageIndex + number + 1
+					return new Promise(async resolve => {
+						await loadImg(index)
+						resolve()
+					})
+				})
+				var successPromise = Promise.all(promiseList)
+				return successPromise
+			}
+			
+			/**
+			 * 获取失败的约定
+			 */
+			function getErrorPromise() {
+				return new Promise(resolve => {
+					setTimeout(() => {
+						resolve()
+					}, TIMEOUT)
+				})
+			}
+			
+			/**
+			 * 加载图片
+			 */
+			async function loadImg(index) {
+				return new Promise(resolve => {
+					var img = createImg(index)
+					img.onload = function() {
+						resolve()
+					}
+					$container.appendChild(img)
+				})
+			}
+			
+			/**
+			 * 创建图片
+			 */
+			function createImg(index) {
+				var img = document.createElement('img')
+				img.onerror = loadPngAfterJpgError.bind(undefined, img, index)
+				var src = prefix + index + '.jpg'
+				img.src = src
+				return img
+			}
+			
+			/**
+			 * jpg格式失败时 尝试png格式
+			 */
+			function loadPngAfterJpgError(img, index) {
+				var src = prefix + index + '.png'
+				img.src = src
+				img.onerror = function(a, b, c) {
+					console.log('png' + index + '----', a, b, c)
+				}
+			}
+		</script>
+    </body>
+</html>
